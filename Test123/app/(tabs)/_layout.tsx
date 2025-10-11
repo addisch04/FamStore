@@ -5,6 +5,7 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import TopBar from '@/components/TopBar';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -13,28 +14,54 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
+        headerShown: true,
+        headerTitle: () => <TopBar />,
+        // Wir lassen HapticTab vorerst auskommentiert, damit es im Web funktioniert
+        // tabBarButton: HapticTab, 
       }}>
+
+      {/* Tab 1: Startseite */}
       <Tabs.Screen
-        name="index"
+        name="home" // Passt zu home.tsx
         options={{
-          title: 'Home',
+          title: 'Start',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
+
+      {/* Tab 2: Vorrat */}
       <Tabs.Screen
-        name="explore"
+        name="pantry" // Passt zur umbenannten pantry.tsx
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Vorrat',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="archivebox.fill" color={color} />,
         }}
       />
+
+      {/* Tab 3: Einkaufsliste */}
       <Tabs.Screen
-        name="kontakt"
+        name="shoppinglist" // Passt zu shoppinglist.tsx
         options={{
-          title: 'Kontakt',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
+          title: 'Liste',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="cart.fill" color={color} />,
+        }}
+      />
+      
+      {/* Tab 4: Rezepte */}
+      <Tabs.Screen
+        name="recipes" // Passt zur umbenannten und korrigierten recipes.tsx
+        options={{
+          title: 'Rezepte',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="book.fill" color={color} />,
+        }}
+      />
+
+      {/* Tab 5: Profil */}
+      <Tabs.Screen
+        name="profile" // Passt zur umbenannten profile.tsx
+        options={{
+          title: 'Profil',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
         }}
       />
     </Tabs>
