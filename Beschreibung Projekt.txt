@@ -1,40 +1,102 @@
-Aktualisiertes Projekt-Briefing: Meine erste React Native App (FamStore)
-Hallo! Ich arbeite an meiner ersten mobilen App und du sollst mir dabei helfen.
-Hier ist eine Zusammenfassung des Projekts, damit du im Bilde bist.
+Absolut. Hier ist eine aktualisierte und zusammengeführte Version deiner Projektbeschreibung. Sie kombiniert dein ursprüngliches Briefing mit der detaillierten Dokumentation unseres aktuellen Fortschritts und dient als perfektes, zentrales Dokument für dein "FamStore"-Projekt.
 
-
+Projektdokumentation: FamStore App
 Das Projekt 🎯
-Ich entwickle meine erste mobile App für Android mit dem Ziel, die Grundlagen von React Native und Expo zu lernen. Das Projekt heißt "FamStore".
+Die Entwicklung einer ersten mobilen App für Android mit dem Ziel, die Grundlagen von React Native und Expo zu lernen. Das Projekt heißt "FamStore". 
 
 
+Ziel der App
+Eine mobile App, welche die Vereinfachung der Hausversorgung und die Übersichtsbehaltung ermöglicht.
 
-Ziel der App: Eine mobile App, welche die Vereinfachung der Hausversorgung und die Übersichtsbehaltung ermöglicht.
+Wichtige Informationen & Technologie-Stack ℹ️
 
-Derzeitiger Stand ✅
-
-Entwicklungsumgebung: Die komplette Umgebung auf Windows ist eingerichtet (Node.js, Git) und alle Probleme (PATH, Execution Policy) sind gelöst.
-
-
-Projekt-Setup: Ein Expo-Projekt wurde mit dem modernen Expo Router-Template initialisiert. Das Projekt enthält bereits eine vorgefertigte Struktur mit Ordnern wie components, assets und constants.
-
-
-Verständnis: Die grundlegende Projektstruktur (der app-Ordner, _layout-Dateien, file-based routing) ist verstanden. Ebenso das Konzept, wie mit einer app/(tabs)/_layout.tsx Datei eine grundlegende App-Struktur mit einer unteren Navigationsleiste (Tab Bar) erstellt wird.
-
-
-Versionskontrolle: Das Projekt ist erfolgreich mit einem GitHub-Repository verknüpft und der grundlegende Workflow (commit, push) ist klar.
-
-Code: Der Code entspricht dem Stand des initialen Templates, inklusive der Konfiguration für eine Tab-Navigation. Es wurde noch kein app-spezifischer, eigener Code geschrieben.
-
-Geplante nächste Schritte 🗺️
-Anpassen und Definieren der Tabs in app/(tabs)/_layout.tsx für die konkreten Funktionen von "FamStore" (z.B. "Übersicht", "Einkaufsliste", "Vorrat").
-
-Erstellen der Benutzeroberflächen (UI) für die einzelnen Screens in den Tabs.
-
-Beginn der Entwicklung erster eigener, wiederverwendbarer UI-Komponenten im components-Ordner.
-
-Wichtige Informationen ℹ️
-Technologie-Stack: React Native, Expo, TypeScript, Git
+Technologien: React Native, Expo, TypeScript, Git 
 
 GitHub Repo: https://github.com/addisch04/FamStore
 
-Mein Kenntnisstand: Ich bin Anfänger. Erklärungen sollten daher grundlegend, schrittweise und für Einsteiger verständlich sein.
+
+Kenntnisstand: Anfänger 
+
+Aktueller Stand der Implementierung ✅
+(Dieser Abschnitt wurde aktualisiert, um unseren gesamten Fortschritt widerzuspiegeln.)
+
+Der anfängliche Stand eines leeren Templates wurde signifikant erweitert. Die App verfügt nun über ein solides, komponentenbasiertes UI-Fundament.
+
+Navigations-Struktur:
+
+Eine voll funktionsfähige Tab-Bar mit fünf benutzerdefinierten Tabs (Start, Vorrat, Liste, Rezepte, Profil) wurde implementiert. 
+
+Eine globale, wiederverwendbare Top-Bar (Header) mit dem App-Logo und einem navigierbaren Profil-Icon ist auf allen Hauptseiten sichtbar.
+
+Home-Screen (home.tsx):
+
+Der Home-Screen ist visuell vollständig implementiert und in wiederverwendbare Komponenten unterteilt.
+
+Er enthält eine Dashboard-Übersicht, ein horizontal scrollbares "Bald ablaufend"-Karussell, "Schnell hinzufügen/entfernen"-Aktionen und ein 2x2 Grid für Rezeptvorschläge.
+
+Das Layout ist für typische Smartphone-Bildschirme optimiert und passt sich an, um ohne Scrollen die wichtigsten Informationen anzuzeigen.
+
+Vorrat-Screen (pantry.tsx):
+
+Das UI-Grundgerüst ist fertiggestellt und interaktiv.
+
+Enthält eine funktionale Suchleiste und eine Filter-Leiste, deren Zustand verwaltet wird (der aktive Filter wird hervorgehoben).
+
+Die Artikelliste wird als gruppierte SectionList in einem 3-spaltigen Grid-Layout dargestellt.
+
+Die Filter-Buttons sind in einem sauberen, zweizeiligen Raster angeordnet, das sich automatisch anpasst.
+
+Platzhalter-Screens:
+
+Alle anderen Screens (shoppinglist, recipes, profile) sind mit einem sauberen Platzhalter-UI befüllt, das anzeigt, dass die Seite in Arbeit ist.
+
+Projekt-Architektur & Aufbau
+Die Ordnerstruktur: Wo liegt was?
+Die App ist in einer logischen Struktur organisiert, um die Wartbarkeit und Erweiterbarkeit zu gewährleisten.
+
+FamStore/
+├── app/                  # Das Herzstück von Expo Router (alle Screens)
+│   ├── (tabs)/           # Route Group für die Tab-Navigation
+│   │   ├── _layout.tsx     # Definiert die Tab-Leiste und den Header
+│   │   ├── home.tsx
+│   │   ├── pantry.tsx
+│   │   └── ... (weitere Screens)
+│   └── _layout.tsx         # Haupt-Layout der App
+│
+├── components/             # Alle wiederverwendbaren "LEGO-Steine"
+│   ├── ui/
+│   ├── DashboardCard.tsx
+│   ├── FilterControls.tsx
+│   └── ... (alle 12+ Komponenten)
+│
+├── constants/              # Statische Werte (Farben, Theme)
+└── tsconfig.json           # TypeScript-Konfiguration
+/app: Jede Datei hier wird automatisch zu einer Seite in der App.
+
+/components: Hier leben alle unsere wiederverwendbaren UI-Elemente. Dies verhindert Code-Wiederholungen und hält die Screen-Dateien sauber.
+
+Das Navigations-System: Wie die App zusammenhängt
+Wir nutzen Expo Router, das auf einem dateibasierten System aufbaut. Die app/(tabs)/_layout.tsx ist die zentrale Steuerdatei für die Hauptansicht. Sie definiert die Tab-Leiste, platziert die <TopBar /> in den Header und konfiguriert jeden einzelnen Tab-Button.
+
+Unsere wiederverwendbaren Komponenten: Die LEGO-Steine
+Wir haben einen modularen Ansatz verfolgt und für fast jedes UI-Element eine eigene Komponente erstellt (z.B. ProductCard, SearchBar, RecipeSuggestions). Dies macht das UI flexibel und einfach zu ändern.
+
+State Management: Wie die UI interaktiv wird
+Wir nutzen den useState-Hook von React, um die Interaktivität zu steuern.
+
+Lokaler State: Komponenten wie die SearchBar verwalten ihren eigenen Zustand (den getippten Text).
+
+"State Lifting": Im Vorrat-Screen wird der aktive Filter-Zustand im übergeordneten PantryScreen gehalten und an die FilterControls und die SectionList weitergegeben. Dadurch kann eine Komponente (die Filter) eine andere (die Liste) beeinflussen.
+
+Geplante nächste Schritte 🗺️
+(Dieser Abschnitt wurde aktualisiert, um die zukünftigen Aufgaben zu definieren.)
+
+State Management ausbauen: DUMMY_DATA durch eine echte State-Management-Lösung ersetzen (z.B. React Context oder Zustand), um das Hinzufügen, Bearbeiten und Löschen von Artikeln zu ermöglichen.
+
+Daten-Speicherung: Eine Methode zur dauerhaften Speicherung der Daten implementieren (z.B. AsyncStorage für lokalen Speicher auf dem Gerät).
+
+Funktionalität implementieren: Die Logik hinter allen Buttons (z.B. "Zur Einkaufsliste hinzufügen", "Löschen", Menü-Aktionen) ausprogrammieren.
+
+Restliche Screens entwickeln: Das UI für die "Einkaufsliste", "Rezepte" und "Profil"-Tabs entwerfen und bauen.
+
+Fortgeschrittene Gesten: Die Wisch-Gesten (Swipe Actions) für die Artikel im Vorrat-Tab implementieren.

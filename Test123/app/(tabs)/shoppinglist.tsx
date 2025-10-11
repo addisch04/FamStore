@@ -1,31 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import AddItemInput from '@/components/AddItemInput';
+import ShoppingListActions from '@/components/ShoppingListActions'; // 1. Neue Komponente importieren
+import { ThemedText } from '@/components/themed-text';
 
-// WICHTIG: Benenne die Funktion passend zum Dateinamen um!
-// Für pantry.tsx -> export default function PantryScreen()
-// Für shoppinglist.tsx -> export default function ShoppingListScreen()
-// usw.
 export default function ShoppingListScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>
-        Dieser Screen ist in Arbeit und wird bald mit Inhalt gefüllt.
-      </Text>
-    </View>
+    <ScrollView style={styles.container}>
+      <AddItemInput />
+      <ShoppingListActions /> {/* 2. Platzhalter ersetzen */}
+
+      {/* Platzhalter für die zukünftige Einkaufsliste */}
+      <View style={styles.placeholderContainer}>
+        <ThemedText>[Die gruppierte Liste kommt hier hin]</ThemedText>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f9f9f9',
   },
-  text: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#666',
+  placeholderContainer: {
+    alignItems: 'center',
+    marginTop: 20,
   },
 });
