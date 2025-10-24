@@ -1,102 +1,99 @@
-Absolut. Hier ist eine aktualisierte und zusammengeführte Version deiner Projektbeschreibung. Sie kombiniert dein ursprüngliches Briefing mit der detaillierten Dokumentation unseres aktuellen Fortschritts und dient als perfektes, zentrales Dokument für dein "FamStore"-Projekt.
-
 Projektdokumentation: FamStore App
 Das Projekt 🎯
-Die Entwicklung einer ersten mobilen App für Android mit dem Ziel, die Grundlagen von React Native und Expo zu lernen. Das Projekt heißt "FamStore". 
+Die Entwicklung einer ersten mobilen App für Android mit dem Ziel, die Grundlagen von React Native und Expo zu lernen. Das Projekt heißt "FamStore".
 
-
-Ziel der App
-Eine mobile App, welche die Vereinfachung der Hausversorgung und die Übersichtsbehaltung ermöglicht.
-
-Wichtige Informationen & Technologie-Stack ℹ️
-
-Technologien: React Native, Expo, TypeScript, Git 
+Ziel der App: Eine mobile App, welche die Vereinfachung der Hausversorgung und die Übersichtsbehaltung ermöglicht.
 
 GitHub Repo: https://github.com/addisch04/FamStore
 
+Kenntnisstand: Anfänger
 
-Kenntnisstand: Anfänger 
+Technologie-Stack ℹ️
+Frontend (Mobile App): React Native, Expo, TypeScript
+
+Backend (API): Node.js, Express (geplant für Vercel Deployment)
+
+Datenbank: Turso (Cloud-basiertes SQLite)
+
+Versionskontrolle: Git
 
 Aktueller Stand der Implementierung ✅
-(Dieser Abschnitt wurde aktualisiert, um unseren gesamten Fortschritt widerzuspiegeln.)
-
-Der anfängliche Stand eines leeren Templates wurde signifikant erweitert. Die App verfügt nun über ein solides, komponentenbasiertes UI-Fundament.
+Der anfängliche Stand eines leeren Templates wurde signifikant erweitert. Die App verfügt nun über ein solides, komponentenbasiertes UI-Fundament für die Kernfunktionen.
 
 Navigations-Struktur:
 
-Eine voll funktionsfähige Tab-Bar mit fünf benutzerdefinierten Tabs (Start, Vorrat, Liste, Rezepte, Profil) wurde implementiert. 
+Eine voll funktionsfähige Tab-Bar mit fünf benutzerdefinierten Tabs (Start, Vorrat, Liste, Rezepte, Profil) wurde implementiert.
 
-Eine globale, wiederverwendbare Top-Bar (Header) mit dem App-Logo und einem navigierbaren Profil-Icon ist auf allen Hauptseiten sichtbar.
+Eine globale, wiederverwendbare Top-Bar (Header) mit navigierbarem Logo und Profil-Icon ist auf allen Hauptseiten sichtbar.
 
-Home-Screen (home.tsx):
+UI-Implementierung:
 
-Der Home-Screen ist visuell vollständig implementiert und in wiederverwendbare Komponenten unterteilt.
+Home-Screen: Visuell vollständig implementiert mit wiederverwendbaren Komponenten für Dashboard, "Bald ablaufend"-Karussell, Schnell-Aktionen und Rezeptvorschlägen. Das Layout ist für typische Smartphone-Bildschirme optimiert.
 
-Er enthält eine Dashboard-Übersicht, ein horizontal scrollbares "Bald ablaufend"-Karussell, "Schnell hinzufügen/entfernen"-Aktionen und ein 2x2 Grid für Rezeptvorschläge.
+Vorrat-Screen: Das UI ist fertiggestellt und interaktiv. Es enthält eine Suchleiste, eine zweizeilige Filter-Leiste und eine Artikelliste in einem 3-spaltigen Grid-Layout. Die Filterung der (Dummy-)Daten funktioniert.
 
-Das Layout ist für typische Smartphone-Bildschirme optimiert und passt sich an, um ohne Scrollen die wichtigsten Informationen anzuzeigen.
+Einkaufslisten-Screen: Das UI ist fertiggestellt und interaktiv. Es enthält ein Eingabefeld, ein 2x2 Grid für Aktionen und eine interaktive Artikelliste in einem 4-spaltigen, quadratischen Grid-Layout. Artikel können abgehakt werden und verschieben sich in eine einklappbare "Erledigt"-Sektion.
 
-Vorrat-Screen (pantry.tsx):
+Platzhalter-Screens: Die restlichen Screens (recipes, profile) sind mit sauberen Platzhaltern befüllt.
 
-Das UI-Grundgerüst ist fertiggestellt und interaktiv.
+Backend & Datenbank:
 
-Enthält eine funktionale Suchleiste und eine Filter-Leiste, deren Zustand verwaltet wird (der aktive Filter wird hervorgehoben).
+Die Turso-Datenbank (famstore-db) wurde in der Cloud erstellt und ist betriebsbereit.
 
-Die Artikelliste wird als gruppierte SectionList in einem 3-spaltigen Grid-Layout dargestellt.
-
-Die Filter-Buttons sind in einem sauberen, zweizeiligen Raster angeordnet, das sich automatisch anpasst.
-
-Platzhalter-Screens:
-
-Alle anderen Screens (shoppinglist, recipes, profile) sind mit einem sauberen Platzhalter-UI befüllt, das anzeigt, dass die Seite in Arbeit ist.
+Die initiale Datenbank-Struktur (Schema) für die Tabellen pantry_items und shopping_list_items wurde definiert und in der Datenbank angelegt.
 
 Projekt-Architektur & Aufbau
-Die Ordnerstruktur: Wo liegt was?
-Die App ist in einer logischen Struktur organisiert, um die Wartbarkeit und Erweiterbarkeit zu gewährleisten.
+Die App folgt einem modernen, modularen Aufbau, der auf Wiederverwendbarkeit und klarer Trennung der Verantwortlichkeiten basiert.
 
-FamStore/
-├── app/                  # Das Herzstück von Expo Router (alle Screens)
-│   ├── (tabs)/           # Route Group für die Tab-Navigation
-│   │   ├── _layout.tsx     # Definiert die Tab-Leiste und den Header
-│   │   ├── home.tsx
-│   │   ├── pantry.tsx
-│   │   └── ... (weitere Screens)
-│   └── _layout.tsx         # Haupt-Layout der App
-│
-├── components/             # Alle wiederverwendbaren "LEGO-Steine"
-│   ├── ui/
-│   ├── DashboardCard.tsx
-│   ├── FilterControls.tsx
-│   └── ... (alle 12+ Komponenten)
-│
-├── constants/              # Statische Werte (Farben, Theme)
-└── tsconfig.json           # TypeScript-Konfiguration
-/app: Jede Datei hier wird automatisch zu einer Seite in der App.
+Frontend-Architektur:
 
-/components: Hier leben alle unsere wiederverwendbaren UI-Elemente. Dies verhindert Code-Wiederholungen und hält die Screen-Dateien sauber.
+Expo Router wird für das dateibasierte Routing verwendet. Die app/(tabs)/_layout.tsx ist die zentrale Steuerdatei für die Hauptansicht.
 
-Das Navigations-System: Wie die App zusammenhängt
-Wir nutzen Expo Router, das auf einem dateibasierten System aufbaut. Die app/(tabs)/_layout.tsx ist die zentrale Steuerdatei für die Hauptansicht. Sie definiert die Tab-Leiste, platziert die <TopBar /> in den Header und konfiguriert jeden einzelnen Tab-Button.
+Die UI ist in über 15 wiederverwendbare Komponenten (z.B. ProductCard, FilterControls, ShoppingListItem) im /components-Ordner aufgeteilt. Dies hält die Screen-Dateien (/app/(tabs)) sauber und fördert die Konsistenz.
 
-Unsere wiederverwendbaren Komponenten: Die LEGO-Steine
-Wir haben einen modularen Ansatz verfolgt und für fast jedes UI-Element eine eigene Komponente erstellt (z.B. ProductCard, SearchBar, RecipeSuggestions). Dies macht das UI flexibel und einfach zu ändern.
+State Management für die UI-Interaktivität wird über React Hooks (useState, useMemo) gehandhabt. Das "State Lifting"-Prinzip wird genutzt, damit übergeordnete Komponenten (z.B. PantryScreen) den Zustand für untergeordnete Komponenten (z.B. FilterControls) verwalten können.
 
-State Management: Wie die UI interaktiv wird
-Wir nutzen den useState-Hook von React, um die Interaktivität zu steuern.
+Geplante nächste Schritte: Backend-Implementierung 🗺️
+Der Fokus liegt nun auf der Erstellung eines Backends und der Anbindung der App an die reale Datenbank, um die DUMMY_DATA zu ersetzen. Dies wird in drei Phasen umgesetzt.
 
-Lokaler State: Komponenten wie die SearchBar verwalten ihren eigenen Zustand (den getippten Text).
+Phase 1: Backend-Entwicklung (Vercel & Node.js)
 
-"State Lifting": Im Vorrat-Screen wird der aktive Filter-Zustand im übergeordneten PantryScreen gehalten und an die FilterControls und die SectionList weitergegeben. Dadurch kann eine Komponente (die Filter) eine andere (die Liste) beeinflussen.
+Ein neues, separates Node.js-Projekt für das Backend wird aufgesetzt.
 
-Geplante nächste Schritte 🗺️
-(Dieser Abschnitt wurde aktualisiert, um die zukünftigen Aufgaben zu definieren.)
+Installation der notwendigen Bibliotheken (express für das Routing, @libsql/client für die Turso-Verbindung).
 
-State Management ausbauen: DUMMY_DATA durch eine echte State-Management-Lösung ersetzen (z.B. React Context oder Zustand), um das Hinzufügen, Bearbeiten und Löschen von Artikeln zu ermöglichen.
+Erstellung von API-Endpunkten für alle notwendigen Aktionen:
 
-Daten-Speicherung: Eine Methode zur dauerhaften Speicherung der Daten implementieren (z.B. AsyncStorage für lokalen Speicher auf dem Gerät).
+GET /api/pantry: Alle Vorratsartikel abrufen.
 
-Funktionalität implementieren: Die Logik hinter allen Buttons (z.B. "Zur Einkaufsliste hinzufügen", "Löschen", Menü-Aktionen) ausprogrammieren.
+POST /api/pantry: Einen neuen Artikel zum Vorrat hinzufügen.
 
-Restliche Screens entwickeln: Das UI für die "Einkaufsliste", "Rezepte" und "Profil"-Tabs entwerfen und bauen.
+GET /api/shopping-list: Alle Einkaufslisten-Artikel abrufen.
 
-Fortgeschrittene Gesten: Die Wisch-Gesten (Swipe Actions) für die Artikel im Vorrat-Tab implementieren.
+POST /api/shopping-list: Einen neuen Artikel zur Einkaufsliste hinzufügen.
+
+PUT /api/shopping-list/:id: Den is_checked-Status eines Artikels aktualisieren.
+
+DELETE /api/pantry/:id & DELETE /api/shopping-list/:id: Artikel löschen.
+
+Sichere Konfiguration der Datenbank-Zugangsdaten über Environment Variables.
+
+Deployment des fertigen Backends auf Vercel, um eine öffentliche API-URL zu erhalten.
+
+Phase 2: App-Integration (React Native)
+
+Entfernen aller DUMMY_DATA-Arrays in den Screen-Dateien.
+
+Implementierung von Datenabruf-Logik mithilfe des useEffect-Hooks und der fetch-API, um beim Laden der Screens Daten vom Vercel-Backend zu laden.
+
+Einbau von Lade- und Fehlerzuständen in der UI (z.B. Anzeige eines Lade-Spinners).
+
+Anpassung der Aktions-Buttons und Eingabefelder, sodass sie POST-, PUT- oder DELETE-Anfragen an das Backend senden, anstatt nur den lokalen State zu ändern.
+
+Phase 3: Finalisierung & weitere Screens
+
+Entwicklung des UIs für die verbleibenden Screens ("Rezepte", "Profil").
+
+Implementierung der fortgeschrittenen Aktionen wie "Einkauf abschließen" (überträgt Artikel von der Einkaufsliste in den Vorrat).
+
+Implementierung der Wisch-Gesten (Swipe Actions) für schnelles Löschen im Vorrat-Tab.
