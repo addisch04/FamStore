@@ -1,34 +1,58 @@
-import React, { useState, useMemo } from 'react';
-import { StyleSheet, SectionList, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, SectionList, View, Alert } from 'react-native';
 import SearchBar from '@/components/SearchBar';
 import FilterControls, { type FilterType } from '@/components/FilterControls';
 import PantryItemRow from '@/components/PantryItemRow';
 import { ThemedText } from '@/components/themed-text';
 
-const DUMMY_DATA = [
-    { key: 'kuehlschrank', title: '🧊 Kühlschrank', data: [ { id: '1', name: 'Milch', quantity: '2 Stk.', expiryInfo: 'in 5 Tagen', expiryColor: 'orange' }, { id: '2', name: 'Käse', quantity: '1 Stk.', expiryInfo: 'in 12 Tagen' }, { id: '6', name: 'Eier', quantity: '6 Stk.', expiryInfo: 'in 10 Tagen' }] },
-    { key: 'gefrierfach', title: '❄️ Gefrierfach', data: [ { id: '3', name: 'Beeren', quantity: '500g', expiryInfo: 'bis 2026' }] },
-    { key: 'schrank', title: '📦 Schrank', data: [ { id: '4', name: 'Pasta', quantity: '3 Pck.', expiryInfo: 'bis 2027' }, { id: '5', name: 'Tomatensoße', quantity: '2 Gläser', expiryInfo: 'bis 2026' }] },
-    { key: 'bad', title: '🛀 Bad', data: [ { id: '7', name: 'Zahnpasta', quantity: '1 Stk.', expiryInfo: 'bis 2026' }] },
-    { key: 'sonstiges', title: '🧺 Sonstiges', data: [ { id: '8', name: 'Batterien', quantity: '4 Stk.', expiryInfo: 'bis 2030' }] },
-];
-
 export default function PantryScreen() {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [pantryData, setPantryData] = useState<any[]>([]);
 
-  const filteredData = useMemo(() => {
-    if (activeFilter === 'all') {
-      return DUMMY_DATA;
+  // <-- Replace with your deployed backend URL
+  const API_BASE = 'https://fam-store-sepia.vercel.app/api/pantry';
+
+  // Fetch pantry items from backend
+  const fetchPantry = async () => {
+    try {
+      const res = await fetch(API_BASE);
+      const data = await res.json();
+
+      // Debug: log to console and show alert on device
+      console.log('Fetched pantry items:', data);
+      Alert.alert('Fetched pantry items', JSON.stringify(data));
+
+      // Map DB fields to SectionList format
+      const sections = [
+        {
+          key: 'kuehlschrank',
+          title: '🧊 Kühlschrank',
+          data: data.map((item, index) => ({
+            id: index.toString(),           // unique id for SectionList
+            name: item.name,
+            quantity: item.quantity,
+            expiryInfo: item.expiry || '—',
+          })),
+        },
+      ];
+
+      setPantryData(sections);
+    } catch (err) {
+      console.log('Error fetching pantry items:', err);
+      Alert.alert('Error fetching pantry items', String(err));
     }
-    return DUMMY_DATA.filter((section) => section.key === activeFilter);
-  }, [activeFilter]);
+  };
+
+  // <-- Call fetchPantry when the component mounts
+  useEffect(() => {
+    fetchPantry();
+  }, []);
 
   return (
     <SectionList
       style={styles.container}
-      sections={filteredData}
+      sections={pantryData}
       keyExtractor={(item) => item.id}
-      numColumns={3}
       ListHeaderComponent={() => (
         <>
           <SearchBar />
@@ -38,24 +62,16 @@ export default function PantryScreen() {
       renderSectionHeader={({ section: { title } }) => (
         <ThemedText style={styles.header}>{title}</ThemedText>
       )}
-      renderItem={({ item, section, index }) => {
-        if (index % 3 !== 0) return null;
-
-        const items = section.data.slice(index, index + 3);
-        return (
-          <View style={styles.row}>
-            {items.map((it) => (
-              <PantryItemRow
-                key={it.id}
-                name={it.name}
-                quantity={it.quantity}
-                expiryInfo={it.expiryInfo}
-                expiryColor={it.expiryColor}
-              />
-            ))}
-          </View>
-        );
-      }}
+      renderItem={({ item }) => (
+        <View style={styles.row}>
+          <PantryItemRow
+            key={item.id}
+            name={item.name}
+            quantity={item.quantity}
+            expiryInfo={item.expiryInfo}
+          />
+        </View>
+      )}
     />
   );
 }

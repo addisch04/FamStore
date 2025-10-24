@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 type PantryItemProps = {
@@ -9,9 +9,12 @@ type PantryItemProps = {
   expiryColor?: string;
 };
 
-export default function PantryItemRow({ name, quantity, expiryInfo, expiryColor = '#666' }: PantryItemProps) {
-  const onMenuPress = () => Alert.alert('Menü für', name);
-
+export default function PantryItemRow({
+  name,
+  quantity,
+  expiryInfo,
+  expiryColor = '#666',
+}: PantryItemProps) {
   return (
     <TouchableOpacity style={styles.tile}>
       <View style={styles.iconContainer}>
@@ -20,7 +23,7 @@ export default function PantryItemRow({ name, quantity, expiryInfo, expiryColor 
       <Text style={styles.name} numberOfLines={2}>{name}</Text>
       <Text style={styles.quantity}>{quantity}</Text>
       <Text style={[styles.expiryInfo, { color: expiryColor }]}>{expiryInfo}</Text>
-      <TouchableOpacity style={styles.menuButton} onPress={onMenuPress}>
+      <TouchableOpacity style={styles.menuButton} onPress={() => {}}>
         <Ionicons name="ellipsis-horizontal" size={22} color="#888" />
       </TouchableOpacity>
     </TouchableOpacity>
@@ -29,7 +32,7 @@ export default function PantryItemRow({ name, quantity, expiryInfo, expiryColor 
 
 const styles = StyleSheet.create({
   tile: {
-    flex: 1, // Wichtig für das Grid-Layout
+    flex: 1,
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 10,
