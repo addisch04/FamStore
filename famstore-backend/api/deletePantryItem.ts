@@ -1,21 +1,18 @@
-import { createClient } from '@libsql/client';
-
-const client = createClient({
-  url: process.env.TURSO_DB_URL,
-  authToken: process.env.TURSO_DB_AUTH_TOKEN,
-});
+// deletePantryItem (KORRIGIERT)
+// ... client setup
 
 export default async function handler(req, res) {
   try {
-    const { id } = req.body;
+    const { **name** } = req.body; // ✅ Erwarte jetzt "name"
 
-    if (!id) {
-      return res.status(400).json({ error: 'ID is required' });
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
     }
 
-    await client.execute('DELETE FROM pantry WHERE id = ?', [id]);
+    await client.execute('DELETE FROM pantry WHERE **name** = ?', [name]); // ✅ Lösche nach "name"
     res.status(200).json({ success: true });
   } catch (err) {
+    console.error("Database error:", err);
     res.status(500).json({ error: err.message });
   }
 }
