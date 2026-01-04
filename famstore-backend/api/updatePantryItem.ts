@@ -1,36 +1,28 @@
 import { createClient } from '@libsql/client';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const client = createClient({
-  url: process.env.TURSO_DB_URL,
-  authToken: process.env.TURSO_DB_AUTH_TOKEN,
+  url: process.env.TURSO_DATABASE_URL || '',
+  authToken: process.env.TURSO_AUTH_TOKEN || '',
 });
 
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'PUT, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
   try {
-    const { id, name, quantity } = req.body;
-
-    if (!id || (!name && !quantity)) {
-      return res.status(400).json({ error: 'ID and at least one field to update are required' });
-    }
-
-    const updates: string[] = [];
-    const values: any[] = [];
-
-    if (name) {
-      updates.push('name = ?');
-      values.push(name);
-    }
-    if (quantity) {
-      updates.push('quantity = ?');
-      values.push(quantity);
-    }
-
-    values.push(id); // for WHERE clause
-
-    await client.execute(`UPDATE pantry SET ${updates.join(', ')} WHERE id = ?`, values);
-
-    res.status(200).json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const { id, name, category, quantity, unit, expiration_date } = req.body;
+    await client.execute({
+      sql: "UPDATE pantry SET name = ?, category = ?, quantity = ?, unit = ?, expiration_date = ? WHERE id = ?",
+      args: [name, category, quantity, unit, expiration_date || null, id]
+    });
+    return res.status(200).json({ success: true });
+  } catch (e: any) { 
+    // Durch das : any erlaubst du TypeScript, auf e.message zuzugreifen
+    return res.status(500).json({ error: e.message });
   }
 }

@@ -1,32 +1,17 @@
 import express from 'express';
-import { createClient } from '@libsql/client';
+import cors from 'cors';
 
 const app = express();
-const port = process.env.PORT || 3000;
+app.use(cors());
+app.use(express.json());
 
-// ✅ Connect to Turso using environment variables from Vercel
-const db = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
-
-// ✅ Root route (for testing)
 app.get('/', (req, res) => {
-  res.send('✅ Famstore backend is running!');
+    res.json({ status: "Backend läuft", info: "Nutze /api/getPantry etc." });
 });
 
-// ✅ API route: Fetch pantry items from Turso
-app.get('/api/pantry', async (req, res) => {
-  try {
-    const result = await db.execute('SELECT * FROM pantry_items');
-    res.json(result.rows); // Send the rows as JSON
-  } catch (error) {
-    console.error('Error fetching pantry items:', error);
-    res.status(500).json({ error: error.message });
-  }
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Basis-Server auf http://localhost:${PORT}`);
 });
 
-// ✅ Start the server locally (Vercel handles this in production)
-app.listen(port, () => {
-  console.log(`✅ Famstore backend running on http://localhost:${port}`);
-});
+export default app;
