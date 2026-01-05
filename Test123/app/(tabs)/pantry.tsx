@@ -10,12 +10,12 @@ export default function PantryScreen() {
   const [pantryData, setPantryData] = useState<any[]>([]);
 
   // <-- Replace with your deployed backend URL
-  const API_BASE = 'https://fam-store-sepia.vercel.app/api/pantry';
+  const API_BASE = 'https://fam-store-sepia.vercel.app';
 
   // Fetch pantry items from backend
   const fetchPantry = async () => {
     try {
-      const res = await fetch(API_BASE);
+      const res = await fetch(`${API_BASE}/pantry`);
       const data = await res.json();
 
       // Debug: log to console and show alert on device
