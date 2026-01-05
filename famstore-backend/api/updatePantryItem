@@ -1,0 +1,36 @@
+// famstore-backend/api/updatePantryItem.js
+import client from './_db.js';
+
+export default async function handler(request, response) {
+  response.setHeader('Access-Control-Allow-Credentials', true);
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'PUT,PATCH,OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (request.method === 'OPTIONS') return response.status(200).end();
+
+  if (request.method !== 'PUT' && request.method !== 'PATCH') {
+    return response.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const { id, name, quantity, expiryDate, category } = request.body;
+
+    if (!id) return response.status(400).json({ error: 'ID is required' });
+
+    // Wir aktualisieren nur Felder, die auch gesendet wurden (Dynamisches SQL)
+    // Einfachheitshalber hier ein komplettes Update:
+    await client.execute({
+      sql: `UPDATE pantry_items 
+            SET name = ?, quantity = ?, expiryDate = ?, category = ? 
+            WHERE id = ?`,
+      args: [name, quantity, expiryDate, category, id]
+    });
+
+    response.status(200).json({ success: true, id });
+
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: error.message });
+  }
+}

@@ -1,0 +1,44 @@
+// famstore-backend/api/addPantryItem.js
+import client from './_db.js';
+
+export default async function handler(request, response) {
+  // CORS Header setzen
+  response.setHeader('Access-Control-Allow-Credentials', true);
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (request.method === 'OPTIONS') {
+    return response.status(200).end();
+  }
+
+  // Nur POST erlauben
+  if (request.method !== 'POST') {
+    return response.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const { name, quantity, expiryDate, category } = request.body;
+    
+    // Einfache Validierung
+    if (!name) {
+      return response.status(400).json({ error: 'Name is required' });
+    }
+
+    // In Datenbank einfügen (Tabelle: pantry_items)
+    const result = await client.execute({
+      sql: "INSERT INTO pantry_items (name, quantity, expiryDate, category) VALUES (?, ?, ?, ?)",
+      args: [name, quantity || '', expiryDate || '', category || 'Uncategorized']
+    });
+
+    // Erfolgreich zurückmelden
+    response.status(201).json({ 
+      id: result.lastInsertRowid.toString(), // ID des neuen Items
+      name, quantity, expiryDate, category 
+    });
+
+  } catch (error) {
+    console.error("Database Error:", error);
+    response.status(500).json({ error: error.message });
+  }
+}
