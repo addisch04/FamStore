@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, SectionList, View, Alert } from 'react-native';
-import SearchBar from '@/components/SearchBar';
-import FilterControls, { type FilterType } from '@/components/FilterControls';
-import PantryItemRow from '@/components/PantryItemRow';
+import SearchBar from '@/components/pantry/SearchBar';
+import FilterControls, { type FilterType } from '@/components/pantry/FilterControls';
+import PantryItemRow from '@/components/pantry/PantryItemRow';
 import { ThemedText } from '@/components/themed-text';
 
 export default function PantryScreen() {
