@@ -1,35 +1,46 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { ThemedText } from '@/components/themed-text';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 
-export default function AddItemInput() {
-  const [text, setText] = useState('');
+// Definiere, was die Komponente erwartet
+interface AddItemInputProps {
+  onAddItem: (name: string, quantity: string, expiryDate: string, category: string) => void;
+}
 
-  const handleAddItem = () => {
-    // Verhindert das Hinzufügen von leeren Einträgen
-    if (text.trim().length === 0) {
-      return;
+export default function AddItemInput({ onAddItem }: AddItemInputProps) {
+  const [name, setName] = useState('');
+  const [quantity, setQuantity] = useState('');
+  // Fürs Erste einfache Textfelder, später können wir DatePicker etc. hinzufügen
+  
+  const handlePress = () => {
+    if (name.trim()) {
+      // Standardwerte für Datum/Kategorie, falls leer
+      onAddItem(name, quantity, '2025-12-31', 'Sonstiges'); 
+      setName('');
+      setQuantity('');
     }
-
-    // Später wird hier der Artikel zur echten Liste hinzugefügt.
-    // Fürs Erste simulieren wir es mit einer Benachrichtigung.
-    Alert.alert('Artikel hinzugefügt:', text);
-
-    // Das Textfeld nach dem Hinzufügen leeren
-    setText('');
   };
 
   return (
     <View style={styles.container}>
-      <Ionicons name="add-circle-outline" size={28} color="#888" style={styles.icon} />
-      <TextInput
-        style={styles.input}
-        placeholder="Neuen Artikel hinzufügen..."
-        value={text}
-        onChangeText={setText}
-        onSubmitEditing={handleAddItem} // Diese Funktion wird bei "Enter" auf der Tastatur ausgeführt
-        returnKeyType="done" // Ändert den "Enter"-Button zu "Fertig"
+      <TextInput 
+        style={styles.input} 
+        placeholder="Neues Item (z.B. Milch)" 
+        placeholderTextColor="#999"
+        value={name}
+        onChangeText={setName}
       />
+      <TextInput 
+        style={[styles.input, styles.qtyInput]} 
+        placeholder="Menge" 
+        placeholderTextColor="#999"
+        value={quantity}
+        onChangeText={setQuantity}
+      />
+      <TouchableOpacity onPress={handlePress} style={styles.addButton}>
+        <IconSymbol name="plus.circle.fill" size={30} color="#007AFF" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -37,18 +48,21 @@ export default function AddItemInput() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    margin: 16,
-  },
-  icon: {
-    marginRight: 8,
+    marginBottom: 20,
+    gap: 10,
   },
   input: {
     flex: 1,
-    height: 50,
+    backgroundColor: '#f0f0f0', // Oder Theme-Farbe nutzen
+    borderRadius: 8,
+    padding: 10,
     fontSize: 16,
   },
+  qtyInput: {
+    flex: 0.4,
+  },
+  addButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });

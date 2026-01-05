@@ -1,52 +1,47 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ThemedText } from '@/components/themed-text';
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import { PantryItem } from '@/services/api'; // Importiere den Typ!
 
-type PantryItemProps = {
-  name: string;
-  quantity: string;
-  expiryInfo: string;
-  expiryColor?: string;
-};
+interface PantryItemRowProps {
+  item: PantryItem; // Hier nutzen wir den importierten Typ
+  onDelete: () => void;
+}
 
-export default function PantryItemRow({
-  name,
-  quantity,
-  expiryInfo,
-  expiryColor = '#666',
-}: PantryItemProps) {
+export default function PantryItemRow({ item, onDelete }: PantryItemRowProps) {
   return (
-    <TouchableOpacity style={styles.tile}>
-      <View style={styles.iconContainer}>
-        <Text style={styles.icon}>🥛</Text>
+    <View style={styles.row}>
+      <View style={styles.info}>
+        <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
+        <ThemedText style={styles.subtext}>
+          {item.quantity} • {item.category}
+        </ThemedText>
       </View>
-      <Text style={styles.name} numberOfLines={2}>{name}</Text>
-      <Text style={styles.quantity}>{quantity}</Text>
-      <Text style={[styles.expiryInfo, { color: expiryColor }]}>{expiryInfo}</Text>
-      <TouchableOpacity style={styles.menuButton} onPress={() => {}}>
-        <Ionicons name="ellipsis-horizontal" size={22} color="#888" />
+      
+      <TouchableOpacity onPress={onDelete} style={styles.deleteBtn}>
+        <IconSymbol name="trash.fill" size={20} color="#FF3B30" />
       </TouchableOpacity>
-    </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tile: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 10,
+  row: {
+    flexDirection: 'row',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
   },
-  iconContainer: { marginBottom: 8 },
-  icon: { fontSize: 32 },
-  name: { fontSize: 14, fontWeight: '600', textAlign: 'center', minHeight: 34 },
-  quantity: { fontSize: 13, color: '#888', marginTop: 2 },
-  expiryInfo: { fontSize: 12, marginTop: 4 },
-  menuButton: { position: 'absolute', top: 0, right: 0, padding: 6 },
+  info: {
+    flex: 1,
+  },
+  subtext: {
+    fontSize: 12,
+    opacity: 0.6,
+  },
+  deleteBtn: {
+    padding: 8,
+  }
 });

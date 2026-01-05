@@ -1,89 +1,164 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, SectionList, View, Alert } from 'react-native';
-import SearchBar from '@/components/pantry/SearchBar';
-import FilterControls, { type FilterType } from '@/components/pantry/FilterControls';
-import PantryItemRow from '@/components/pantry/PantryItemRow';
+import {
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+  RefreshControl
+} from 'react-native';
+
 import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import AddItemInput from '@/components/shoppinglist/AddItemInput';
+import PantryItemRow from '@/components/pantry/PantryItemRow';
+import FilterControls from '@/components/pantry/FilterControls';
+import { useThemeColor } from '@/hooks/use-theme-color';
+
+// Importiere unsere neuen API-Funktionen
+import { 
+  fetchPantryItems, 
+  addPantryItem, 
+  deletePantryItem, 
+  updatePantryItem, 
+  PantryItem 
+} from '../../services/api';
 
 export default function PantryScreen() {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [pantryData, setPantryData] = useState<any[]>([]);
+  const [items, setItems] = useState<PantryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  
+  const backgroundColor = useThemeColor({}, 'background');
 
-  // <-- Replace with your deployed backend URL
-  const API_BASE = 'https://fam-store-sepia.vercel.app';
+  // Daten beim Start laden
+  useEffect(() => {
+    loadItems();
+  }, []);
 
-  // Fetch pantry items from backend
-  const fetchPantry = async () => {
+  const loadItems = async () => {
     try {
-      const res = await fetch(`${API_BASE}/pantry`);
-      const data = await res.json();
-
-      // Debug: log to console and show alert on device
-      console.log('Fetched pantry items:', data);
-      Alert.alert('Fetched pantry items', JSON.stringify(data));
-
-      // Map DB fields to SectionList format
-      const sections = [
-        {
-          key: 'kuehlschrank',
-          title: '🧊 Kühlschrank',
-          data: data.map((item, index) => ({
-            id: index.toString(),           // unique id for SectionList
-            name: item.name,
-            quantity: item.quantity,
-            expiryInfo: item.expiry || '—',
-          })),
-        },
-      ];
-
-      setPantryData(sections);
-    } catch (err) {
-      console.log('Error fetching pantry items:', err);
-      Alert.alert('Error fetching pantry items', String(err));
+      const data = await fetchPantryItems();
+      setItems(data);
+    } catch (error) {
+      console.error("Fehler beim Laden:", error);
+      Alert.alert("Fehler", "Konnte Daten nicht laden.");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
     }
   };
 
-  // <-- Call fetchPantry when the component mounts
-  useEffect(() => {
-    fetchPantry();
-  }, []);
+  const onRefresh = () => {
+    setRefreshing(true);
+    loadItems();
+  };
+
+  // Hinzufügen
+  const handleAddItem = async (name: string, quantity: string, expiryDate: string, category: string) => {
+    try {
+      // Optimistisches Update (Sofort anzeigen) oder warten? Wir warten hier sicherheitshalber.
+      const newItem = await addPantryItem({ name, quantity, expiryDate, category });
+      setItems(prev => [...prev, newItem]); // Neues Item zur Liste hinzufügen (ID kommt vom Server)
+    } catch (error) {
+      Alert.alert("Fehler", "Item konnte nicht gespeichert werden.");
+    }
+  };
+
+  // Löschen
+  const handleDeleteItem = (id: number) => {
+    Alert.alert(
+      "Löschen",
+      "Möchtest du dieses Item wirklich löschen?",
+      [
+        { text: "Abbrechen", style: "cancel" },
+        { 
+          text: "Löschen", 
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deletePantryItem(id);
+              setItems(prev => prev.filter(item => item.id !== id));
+            } catch (error) {
+              Alert.alert("Fehler", "Konnte nicht gelöscht werden.");
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  // Filtern (Client-seitig, da die Liste meist klein ist)
+  const filteredItems = items.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
-    <SectionList
-      style={styles.container}
-      sections={pantryData}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={() => (
-        <>
-          <SearchBar />
-          <FilterControls activeFilter={activeFilter} onFilterChange={setActiveFilter} />
-        </>
+    <ThemedView style={[styles.container, { backgroundColor }]}>
+      <ThemedView style={styles.header}>
+        <ThemedText type="title">Vorratsschrank 🍎</ThemedText>
+        <TouchableOpacity onPress={loadItems} style={styles.reloadButton}>
+           <IconSymbol name="arrow.clockwise" size={24} color="#007AFF" />
+        </TouchableOpacity>
+      </ThemedView>
+
+      <AddItemInput onAddItem={handleAddItem} />
+      
+      <FilterControls 
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
+
+      {loading ? (
+        <ActivityIndicator size="large" style={{ marginTop: 20 }} />
+      ) : (
+        <FlatList
+          data={filteredItems}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <PantryItemRow 
+              item={item} 
+              onDelete={() => handleDeleteItem(item.id)}
+              // onEdit implementieren wir später, wenn du möchtest
+            />
+          )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          ListEmptyComponent={
+            <ThemedText style={styles.emptyText}>Keine Items gefunden.</ThemedText>
+          }
+        />
       )}
-      renderSectionHeader={({ section: { title } }) => (
-        <ThemedText style={styles.header}>{title}</ThemedText>
-      )}
-      renderItem={({ item }) => (
-        <View style={styles.row}>
-          <PantryItemRow
-            key={item.id}
-            name={item.name}
-            quantity={item.quantity}
-            expiryInfo={item.expiryInfo}
-          />
-        </View>
-      )}
-    />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  header: { fontSize: 18, fontWeight: 'bold', padding: 16, backgroundColor: '#f9f9f9' },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 15,
+  container: {
+    flex: 1,
+    padding: 16,
+    paddingTop: 60,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  reloadButton: {
+    padding: 8,
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 40,
+    opacity: 0.6,
+  }
 });
