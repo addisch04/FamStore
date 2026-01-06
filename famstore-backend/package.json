@@ -6,7 +6,17 @@
     "@libsql/client": "^0.6.0",
     "dotenv": "^16.4.5"
   },
+  "scripts": {
+    "start": "expo start",
+    "build": "expo export", 
+    "reset-project": "node ./scripts/reset-project.js",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "expo lint"
+  },
   "engines": {
     "node": "18.x"
   }
+  
 }
