@@ -11,9 +11,9 @@ import {
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import AddItemInput from '@/components/shoppinglist/AddItemInput';
-import PantryItemRow from '@/components/pantry/PantryItemRow';
-import FilterControls from '@/components/pantry/FilterControls';
+import AddItemInput from '@/components/AddItemInput';
+import PantryItemRow from '@/components/PantryItemRow';
+import FilterControls from '@/components/FilterControls';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 // Importiere unsere neuen API-Funktionen

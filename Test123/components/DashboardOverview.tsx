@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import DashboardCard from './DashboardCard'; // Wir importieren unseren Baustein
+import DashboardCard from '@/components/DashboardCard';
 
 export default function DashboardOverview() {
   // Später kommen diese Daten aus dem App-Zustand, jetzt sind sie fest einprogrammiert.

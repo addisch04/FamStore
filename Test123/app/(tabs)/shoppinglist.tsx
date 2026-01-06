@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, SectionList, View, TouchableOpacity } from 'react-native';
-import AddItemInput from '@/components/shoppinglist/AddItemInput';
-import ShoppingListActions from '@/components/shoppinglist/ShoppingListActions';
-import ShoppingListItem from '@/components/shoppinglist/ShoppingListItem';
+import AddItemInput from '@/components/AddItemInput';
+import ShoppingListActions from '@/components/ShoppingListActions';
+import ShoppingListItem from '@/components/ShoppingListItem';
 import { ThemedText } from '@/components/themed-text';
 import { Ionicons } from '@expo/vector-icons';
 

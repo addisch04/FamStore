@@ -1,10 +1,10 @@
 import { StyleSheet, ScrollView } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
-import DashboardOverview from '@/components/home/DashboardOverview';
-import ExpiringSoonCarousel from '@/components/home/ExpiringSoonCarousel';
-import QuickAdd from '@/components/home/QuickAdd';
-import QuickRemove from '@/components/home/QuickRemove';
-import RecipeSuggestions from '@/components/home/RecipeSuggestions'; // 1. Importieren
+import DashboardOverview from '@/components/DashboardOverview';
+import ExpiringSoonCarousel from '@/components/ExpiringSoonCarousel';
+import QuickAdd from '@/components/QuickAdd';
+import QuickRemove from '@/components/QuickRemove';
+import RecipeSuggestions from '@/components/RecipeSuggestions'; // 1. Importieren
 
 export default function HomeScreen() {
   return (

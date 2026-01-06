@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { ThemedText } from '@/components/themed-text';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Ionicons } from '@expo/vector-icons'; // <-- Wir nutzen jetzt Ionicons direkt
 
-// Definiere, was die Komponente erwartet
 interface AddItemInputProps {
   onAddItem: (name: string, quantity: string, expiryDate: string, category: string) => void;
 }
@@ -11,12 +9,10 @@ interface AddItemInputProps {
 export default function AddItemInput({ onAddItem }: AddItemInputProps) {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState('');
-  // Fürs Erste einfache Textfelder, später können wir DatePicker etc. hinzufügen
-  
+
   const handlePress = () => {
     if (name.trim()) {
-      // Standardwerte für Datum/Kategorie, falls leer
-      onAddItem(name, quantity, '2025-12-31', 'Sonstiges'); 
+      onAddItem(name, quantity, '2025-12-31', 'Sonstiges');
       setName('');
       setQuantity('');
     }
@@ -39,7 +35,8 @@ export default function AddItemInput({ onAddItem }: AddItemInputProps) {
         onChangeText={setQuantity}
       />
       <TouchableOpacity onPress={handlePress} style={styles.addButton}>
-        <IconSymbol name="plus.circle.fill" size={30} color="#007AFF" />
+        {/* Hier das neue Icon für Android & iOS */}
+        <Ionicons name="add-circle" size={40} color="#007AFF" />
       </TouchableOpacity>
     </View>
   );
@@ -50,13 +47,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 20,
     gap: 10,
+    alignItems: 'center', // Wichtig, damit Button mittig ist
   },
   input: {
     flex: 1,
-    backgroundColor: '#f0f0f0', // Oder Theme-Farbe nutzen
+    backgroundColor: '#f0f0f0',
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
+    height: 50, // Feste Höhe für bessere Optik
   },
   qtyInput: {
     flex: 0.4,

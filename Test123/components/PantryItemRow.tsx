@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { PantryItem } from '@/services/api'; // Importiere den Typ!
+import { Ionicons } from '@expo/vector-icons'; // <-- Ionicons importieren
+import { PantryItem } from '@/services/api';
 
 interface PantryItemRowProps {
-  item: PantryItem; // Hier nutzen wir den importierten Typ
+  item: PantryItem;
   onDelete: () => void;
 }
 
@@ -20,7 +20,8 @@ export default function PantryItemRow({ item, onDelete }: PantryItemRowProps) {
       </View>
       
       <TouchableOpacity onPress={onDelete} style={styles.deleteBtn}>
-        <IconSymbol name="trash.fill" size={20} color="#FF3B30" />
+        {/* Universelles Mülleimer-Icon */}
+        <Ionicons name="trash" size={24} color="#FF3B30" />
       </TouchableOpacity>
     </View>
   );
